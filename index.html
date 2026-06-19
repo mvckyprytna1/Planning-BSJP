@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screener BSJP - Stockbit Guide</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Mendefinisikan Variabel CSS yang dibutuhkan HTML aslimu */
+        :root {
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --color-background-primary: #ffffff;
+            --color-background-secondary: #f4f7fb;
+            --color-border-secondary: #d1d9e6;
+            --color-border-tertiary: #e2e8f0;
+            --color-text-primary: #1e293b;
+            --color-text-secondary: #64748b;
+            --border-radius-md: 16px;
+        }
+
+        /* Latar Belakang Body - Gradasi Cerah yang Menyegarkan Mata */
+        body {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 15px;
+            font-family: var(--font-sans);
+            box-sizing: border-box;
+        }
+
+        /* Container ala Aplikasi Mobile */
+        .app-container {
+            background: var(--color-background-primary);
+            max-width: 550px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* --- Menimpa & Mempercantik Class HTML Aslimu --- */
+        
+        .wrap {
+            padding: 0 !important; /* Menyesuaikan dengan padding app-container */
+        }
+
+        /* Styling Header / Judul */
+        h2 {
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            letter-spacing: -0.5px;
+        }
+
+        /* Animasi Tombol Tab */
+        .tab-btn {
+            font-weight: 600 !important;
+            padding: 8px 16px !important;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #e2e8f0 !important;
+            transform: translateY(-1px);
+        }
+        .tab-btn.active {
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Efek Hover dan Shadow pada Card Filter & Step */
+        .filter-card, .step-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .filter-card:hover, .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            background: #ffffff !important;
+            border-color: var(--color-border-tertiary);
+        }
+
+        /* Animasi Transisi Konten Tab */
+        .tab-content {
+            animation: slideFadeUp 0.4s ease-out forwards;
+        }
+
+        @keyframes slideFadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mempercantik Tabel */
+        table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 0 1px var(--color-border-tertiary);
+        }
+        th { background: #f8fafc; }
+        tr:hover td { background: #f1f5f9; }
+
+        /* Tombol JS Kustom */
+        .btn-ready {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #185FA5 0%, #2563eb 100%);
+            color: white;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-ready:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4);
+        }
+        .btn-ready:active {
+            transform: translateY(1px);
+        }
+
+        /* Responsif untuk HP Ukuran Kecil */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .app-container { padding: 18px; border-radius: 20px; }
+            h2 { font-size: 18px !important; }
+            .tab-nav { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+            .tab-nav::-webkit-scrollbar { display: none; }
+            .tab-btn { flex-shrink: 0; white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <style>
+          * { box-sizing: border-box; }
+          body { margin: 0; }
+          .wrap { padding: 1.5rem 0; font-family: var(--font-sans); }
+          .tab-nav { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+          .tab-btn { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }
+          .tab-btn.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+          .tab-content { display: none; }
+          .tab-content.active { display: block; }
+          .sec-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0 0 10px; }
+          .step-card { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+          .step-num { min-width: 28px; height: 28px; border-radius: 50%; background: var(--color-text-primary); color: var(--color-background-primary); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+          .step-body { flex: 1; }
+          .step-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 3px; }
+          .step-desc { font-size: 12px; color: var(--color-text-secondary); margin: 0; line-height: 1.55; }
+          .step-path { display: inline-block; font-size: 11px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 2px 7px; font-family: monospace; margin-top: 4px; color: var(--color-text-primary); }
+          .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
+          .filter-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 8px; }
+          .filter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+          .filter-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+          .filter-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+          .fb-must { background: #FCEBEB; color: #A32D2D; }
+          .fb-penting { background: #FAEEDA; color: #854F0B; }
+          .fb-bonus { background: #EAF3DE; color: #3B6D11; }
+          .filter-value { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+          .filter-why { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; font-style: italic; }
+          .warn-box { background: #FAEEDA; border-left: 3px solid #EF9F27; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; color: #633806; line-height: 1.5; }
+          .danger-box { background: #FCEBEB; border-left: 3px solid #E24B4A; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; color: #791F1F; line-height: 1.5; }
+          .good-box { background: #EAF3DE; border-left: 3px solid #639922; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; color: #27500A; line-height: 1.5; }
+          .info-box { background: #E6F1FB; border-left: 3px solid #378ADD; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; color: #0B3C70; line-height: 1.5; }
+          .timeline { display: flex; flex-direction: column; gap: 0; }
+          .tl-item { display: flex; gap: 12px; }
+          .tl-line { display: flex; flex-direction: column; align-items: center; }
+          .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+          .tl-vert { width: 1px; background: var(--color-border-tertiary); flex: 1; margin: 4px 0; }
+          .tl-body { padding-bottom: 14px; flex: 1; }
+          .tl-time { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); margin: 0 0 2px; }
+          .tl-act { font-size: 13px; color: var(--color-text-primary); margin: 0 0 2px; }
+          .tl-note { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+          .table-wrap { width: 100%; overflow-x: auto; }
+          table { width: 100%; border-collapse: collapse; font-size: 12px; }
+          th { text-align: left; padding: 6px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-tertiary); font-weight: 500; }
+          td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: top; line-height: 1.4; }
+          tr:last-child td { border-bottom: none; }
+          .bold { font-weight: 500; }
+          code { font-family: monospace; background: var(--color-background-secondary); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+        </style>
+
+        <div class="wrap">
+          <h2 style="font-size:15px; font-weight:500; margin:0 0 4px; color:var(--color-text-primary);">Screener BSJP — Beli Sore Jual Pagi</h2>
+          <p style="font-size:12px; color:var(--color-text-secondary); margin:0 0 1.25rem;">Panduan lengkap custom screener di Stockbit · Khusus untuk Vicky</p>
+
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('filters')">Filter Screener</button>
+            <button class="tab-btn" onclick="showTab('cara')">Cara Pasang</button>
+            <button class="tab-btn" onclick="showTab('jadwal')">Jadwal Eksekusi</button>
+            <button class="tab-btn" onclick="showTab('konfirmasi')">Cek Manual</button>
+            <button class="tab-btn" onclick="showTab('rules')">Rules</button>
+          </div>
+
+          <div id="tab-filters" class="tab-content active">
+            <p class="sec-label">Filter Wajib (HARUS ADA)</p>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">1. Harga Saham</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Last Price ≥ 100</code> dan <code>Last Price ≤ 2000</code></p>
+              <p class="filter-why">Hindari saham gocap (&lt;50) yang susah gerak. Max 2000 biar likuid dan spread kecil.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">2. Volume Besar</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Volume (Today) ≥ 5,000,000 lot</code></p>
+              <p class="filter-why">Volume minimal 5 juta lot memastikan saham cukup likuid. Kalau volume tipis, spread lebar dan susah keluar pagi.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">3. Frekuensi Transaksi</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Frequency (Today) ≥ 1,000</code></p>
+              <p class="filter-why">Frekuensi tinggi = banyak transaksi = likuid = gampang exit pagi hari tanpa nyangkut.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">4. Perubahan Harga Hari Ini</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Price Change (Today) ≥ 1%</code> dan <code>≤ 5%</code></p>
+              <p class="filter-why">Saham naik tapi belum terlalu tinggi. Naik &gt;5% sore = rawan profit taking pagi. Flat = tidak ada momentum.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">5. Harga di Atas EMA20</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Last Price ≥ EMA 20</code></p>
+              <p class="filter-why">Saham harus di atas EMA20 = tren jangka pendek masih bullish. Kalau di bawah EMA20, skip.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">6. Harga di Atas EMA50</span>
+                <span class="filter-badge fb-must">WAJIB</span>
+              </div>
+              <p class="filter-value"><code>Last Price ≥ EMA 50</code></p>
+              <p class="filter-why">Tren jangka menengah masih positif. Hindari saham yang sedang bearish medium-term.</p>
+            </div>
+
+            <div class="divider"></div>
+            <p class="sec-label">Filter Penting (Sangat Disarankan)</p>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">7. RSI (14)</span>
+                <span class="filter-badge fb-penting">PENTING</span>
+              </div>
+              <p class="filter-value"><code>RSI (14) ≥ 50</code> dan <code>RSI (14) ≤ 70</code></p>
+              <p class="filter-why">RSI 50–70 = momentum positif tapi belum overbought. RSI &gt;70 = rawan balik badan pagi. RSI &lt;50 = lemah.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">8. Volume vs Rata-rata 5 Hari</span>
+                <span class="filter-badge fb-penting">PENTING</span>
+              </div>
+              <p class="filter-value"><code>Volume Today ≥ 1.5x Volume Avg 5D</code></p>
+              <p class="filter-why">Volume hari ini harus lebih besar 1.5x dari rata-rata 5 hari. Ini sinyal ada yang mengakumulasi.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">9. Market Cap</span>
+                <span class="filter-badge fb-penting">PENTING</span>
+              </div>
+              <p class="filter-value"><code>Market Cap ≥ 500 Miliar</code></p>
+              <p class="filter-why">Hindari saham micro cap yang mudah digoreng/dimanipulasi. Market cap &gt;500M lebih aman.</p>
+            </div>
+
+            <div class="divider"></div>
+            <p class="sec-label">Filter Bonus (Opsional, makin ketat makin bagus)</p>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">10. EMA5 di Atas EMA20</span>
+                <span class="filter-badge fb-bonus">BONUS</span>
+              </div>
+              <p class="filter-value"><code>EMA 5 ≥ EMA 20</code></p>
+              <p class="filter-why">Golden cross jangka pendek. Sinyal momentum naik lebih kuat.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header">
+                <span class="filter-name">11. Foreign Net Buy</span>
+                <span class="filter-badge fb-bonus">BONUS</span>
+              </div>
+              <p class="filter-value"><code>Foreign Net Buy (Today) ≥ 0</code></p>
+              <p class="filter-why">Asing beli = sentimen positif. Kalau asing net sell, hati-hati ada distribusi.</p>
+            </div>
+
+            <div class="good-box" style="margin-top:12px;">
+              <strong style="font-weight:500;">Sorting hasil screener:</strong> Urutkan berdasarkan <strong>Volume (Today) — Descending</strong>. Saham paling aktif tampil pertama.
+            </div>
+          </div>
+
+          <div id="tab-cara" class="tab-content">
+            <p class="sec-label">Cara Pasang di Stockbit Step-by-Step</p>
+
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <p class="step-title">Buka Screener</p>
+                <p class="step-desc">Di Stockbit web/app, klik ikon kaca pembesar (Search) → pilih menu <strong>Screener</strong>. Atau langsung ke menu bar atas → <strong>Screener</strong>.</p>
+                <span class="step-path">stockbit.com → Search → Screener</span>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <p class="step-title">Buat Screener Baru</p>
+                <p class="step-desc">Klik tombol <strong>"Create New"</strong> atau <strong>"Create Screener"</strong> di bagian atas halaman Screener.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <p class="step-title">Beri Nama</p>
+                <p class="step-desc">Isi nama screener. Contoh: <code>BSJP Vicky v1</code>. Isi deskripsi singkat supaya mudah diingat.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <p class="step-title">Klik "Add a Rule" → Masukkan Filter Satu per Satu</p>
+                <p class="step-desc">Setiap klik Add a Rule, muncul satu filter baru. Masukkan sesuai tabel di bawah ini secara berurutan:</p>
+              </div>
+            </div>
+
+            <div class="table-wrap" style="margin: 8px 0 16px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nama Filter di Stockbit</th>
+                    <th>Operator</th>
+                    <th>Nilai</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="bold">1</td><td>Last Price</td><td>≥</td><td>100</td></tr>
+                  <tr><td class="bold">2</td><td>Last Price</td><td>≤</td><td>2000</td></tr>
+                  <tr><td class="bold">3</td><td>Volume</td><td>≥</td><td>5,000,000</td></tr>
+                  <tr><td class="bold">4</td><td>Frequency</td><td>≥</td><td>1,000</td></tr>
+                  <tr><td class="bold">5</td><td>Price Change (%)</td><td>≥</td><td>1</td></tr>
+                  <tr><td class="bold">6</td><td>Price Change (%)</td><td>≤</td><td>5</td></tr>
+                  <tr><td class="bold">7</td><td>Last Price vs EMA 20</td><td>≥</td><td>EMA 20</td></tr>
+                  <tr><td class="bold">8</td><td>Last Price vs EMA 50</td><td>≥</td><td>EMA 50</td></tr>
+                  <tr><td class="bold">9</td><td>RSI (14)</td><td>≥</td><td>50</td></tr>
+                  <tr><td class="bold">10</td><td>RSI (14)</td><td>≤</td><td>70</td></tr>
+                  <tr><td class="bold">11</td><td>Market Cap</td><td>≥</td><td>500,000,000,000</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <p class="step-title">Sort & Klik Screen</p>
+                <p class="step-desc">Setelah semua rule masuk, set <strong>Sort by: Volume — Descending</strong>. Lalu klik tombol <strong>"Screen"</strong>.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">6</div>
+              <div class="step-body">
+                <p class="step-title">Simpan Screener</p>
+                <p class="step-desc">Klik <strong>"Save"</strong> supaya screener tersimpan. Besok tinggal buka → klik nama screener → klik Screen lagi (data real-time ter-update otomatis).</p>
+              </div>
+            </div>
+
+            <div class="info-box">
+              <strong style="font-weight:500;">Tips:</strong> Untuk filter "Last Price vs EMA 20", pilih tipe <strong>Ratio vs Ratio</strong> di Stockbit. Bandingkan: <code>Last Price</code> &gt; <code>EMA(20)</code>. Kalau tidak ketemu EMA di filter, cari dengan kata kunci <em>"Exponential Moving Average"</em> atau <em>"EMA"</em>.
+            </div>
+          </div>
+
+          <div id="tab-jadwal" class="tab-content">
+            <p class="sec-label">Jadwal Eksekusi BSJP</p>
+
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#185FA5;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">14:30 – 15:00 WIB</p>
+                  <p class="tl-act">🔍 Jalankan Screener</p>
+                  <p class="tl-note">Buka Stockbit → klik screener BSJP → klik Screen. Catat 5–10 saham hasil teratas.</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#378ADD;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">15:00 – 15:30 WIB</p>
+                  <p class="tl-act">🧐 Seleksi Manual (Tab Konfirmasi)</p>
+                  <p class="tl-note">Cek chart, bandarmology, broksum dari daftar hasil screener. Pilih maks 3 saham terbaik.</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#639922;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">15:30 – 15:49 WIB</p>
+                  <p class="tl-act">✅ Entry / Beli</p>
+                  <p class="tl-note">Masuk di harga pasar atau pasang order limit di support terdekat. Jangan beli di atas harga wajar.</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#EF9F27;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">15:50 WIB</p>
+                  <p class="tl-act">⏰ Pre-closing</p>
+                  <p class="tl-note">Tidak boleh beli lagi setelah 15:49. Pantau closing price — kalau tutup merah, pertimbangkan cut besok pagi.</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#A32D2D;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">09:00 – 09:30 WIB (besok)</p>
+                  <p class="tl-act">📤 Jual Pagi</p>
+                  <p class="tl-note">Target jual di 09:00–09:30. Market open biasanya ada euforia pagi yang mendorong harga. Pasang sell limit sebelum market buka.</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-line"><div class="tl-dot" style="background:#639922;"></div><div class="tl-vert"></div></div>
+                <div class="tl-body">
+                  <p class="tl-time">09:30 – 10:00 WIB</p>
+                  <p class="tl-act">✂️ Evaluasi</p>
+                  <p class="tl-note">Kalau belum terjual di 09:30 dan harga malah turun, lebih baik cut daripada hold seharian. BSJP bukan swing, jangan dipaksakan hold lama.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="warn-box" style="margin-top:12px;">
+              <strong style="font-weight:500;">Hari yang cocok:</strong> Senin–Kamis. Hindari beli sore Jumat (hold 3 hari weekend = rawan berita buruk). Kecuali kondisi market sangat bagus.
+            </div>
+          </div>
+
+          <div id="tab-konfirmasi" class="tab-content">
+            <p class="sec-label">Checklist Konfirmasi Manual Sebelum Beli</p>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 12px;">Screener hanya alat filter awal. Setelah dapat list saham, wajib cek hal ini sebelum beli:</p>
+
+            <div class="filter-card">
+              <div class="filter-header"><span class="filter-name">✅ 1. Cek Chart Daily (Chartbit)</span></div>
+              <p class="filter-value">Buka chart daily. Pastikan:</p>
+              <p class="filter-why">- Candle hari ini bullish (hijau) atau doji dengan ekor bawah<br>- Tidak sedang di dekat resistance kuat<br>- Volume hari ini lebih besar dari beberapa hari sebelumnya</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header"><span class="filter-name">✅ 2. Cek Bandarmology / Broksum</span></div>
+              <p class="filter-value">Di Stockbit → Bandarmology atau Running Trade</p>
+              <p class="filter-why">Cari tanda akumulasi: broker-broker besar net buy. Kalau broker institusi buang (net sell), skip saham ini.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header"><span class="filter-name">✅ 3. Tidak Ada Berita Buruk</span></div>
+              <p class="filter-value">Cek tab News/Stream di Stockbit</p>
+              <p class="filter-why">Pastikan tidak ada berita negatif: laporan keuangan buruk, masalah hukum, suspensi BEI, dll. Satu berita buruk bisa bikin saham kena ARB pagi.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header"><span class="filter-name">✅ 4. Cek IHSG Sore Itu</span></div>
+              <p class="filter-value">Lihat kondisi IHSG sebelum beli</p>
+              <p class="filter-why">Kalau IHSG hari itu turun &gt;1% = skip BSJP hari ini. Market bearish, peluang saham naik pagi sangat kecil.</p>
+            </div>
+
+            <div class="filter-card">
+              <div class="filter-header"><span class="filter-name">✅ 5. Posisi Harga Sore</span></div>
+              <p class="filter-value">Idealnya harga sore: naik tapi belum terlalu jauh dari EMA20</p>
+              <p class="filter-why">Kalau harga sudah naik 4–5% hari itu dan jauh di atas EMA20, terlalu telat. Tunggu pullback atau skip.</p>
+            </div>
+
+            <div class="danger-box">
+              <strong style="font-weight:500;">SKIP saham kalau:</strong> Sudah naik &gt;5% hari itu · Tidak ada volume besar · Chart trend turun · Ada distribusi dari broker besar · Berita negatif · IHSG turun hari itu
+            </div>
+          </div>
+
+          <div id="tab-rules" class="tab-content">
+            <p class="sec-label">Trading Rules BSJP — Tempel di Meja</p>
+
+            <div class="good-box"><strong style="font-weight:500;">Entry Rules:</strong><br>
+            • Beli hanya setelah screener + konfirmasi manual lolos semua ✅<br>
+            • Max 3 saham per hari — tidak boleh lebih<br>
+            • Beli di jam 15:30–15:49 WIB, tidak sebelum dan tidak sesudah<br>
+            • Jangan beli saham yang sudah naik &gt;5% hari itu</div>
+
+            <div class="warn-box"><strong style="font-weight:500;">Exit Rules:</strong><br>
+            • Target jual: 09:00–09:30 WIB besok pagi<br>
+            • Pasang sell limit sebelum market buka (08:55)<br>
+            • Kalau 09:30 belum kena dan harga turun → cut loss<br>
+            • Target profit: 1–3% per trade sudah bagus untuk BSJP</div>
+
+            <div class="danger-box"><strong style="font-weight:500;">Stop Loss Rules:</strong><br>
+            • Kalau buka pagi langsung ARB atau turun &gt;2% → jual segera, jangan tunggu<br>
+            • Jangan hold sampai sore kalau trade BSJP gagal → itu bukan BSJP lagi, itu gambling<br>
+            • Max loss per hari: 2% dari modal — setelah itu stop trading hari itu</div>
+
+            <div class="info-box"><strong style="font-weight:500;">Psikologi:</strong><br>
+            • Profit 1–2% pagi = ambil, jangan serakah nunggu lebih tinggi<br>
+            • Kalau screener cuma keluar 1–2 saham sore itu = bagus, itu pertanda market sedang selektif<br>
+            • Jangan beli karena FOMO lihat orang lain beli — tunggu screener confirm<br>
+            • Skip Jumat sore kecuali kondisi market sangat bagus</div>
+
+            <div class="filter-card" style="margin-top:4px;">
+              <p class="filter-name" style="margin-bottom:8px;">Jurnal Wajib Per Trade</p>
+              <p class="filter-why" style="font-style:normal; line-height:1.7;">
+                📝 Tanggal entry · Nama saham · Harga beli · Alasan beli (dari filter mana)<br>
+                📝 Harga jual · Waktu jual · Profit/Loss · Pelajaran
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <script>
+        function showTab(id) {
+          document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.getElementById('tab-' + id).classList.add('active');
+          event.target.classList.add('active');
+        }
+        </script>
+        <button id="commitBtn" class="btn-ready">🔥 Saya Paham & Siap Disiplin!</button>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('commitBtn');
+            const wrap = document.querySelector('.app-container');
+
+            // Cek status hari ini
+            const today = new Date().toLocaleDateString();
+            if (localStorage.getItem('bsjp_commit') === today) {
+                setButtonReady(btn);
+            }
+
+            btn.addEventListener('click', () => {
+                localStorage.setItem('bsjp_commit', today);
+                setButtonReady(btn);
+                
+                // Animasi bergetar sedikit tanda berhasil
+                wrap.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    wrap.style.transform = 'scale(1)';
+                }, 150);
+            });
+
+            function setButtonReady(button) {
+                button.innerText = '✅ Mode Disiplin Aktif Hari Ini';
+                button.style.background = 'linear-gradient(135deg, #3B6D11 0%, #27500A 100%)';
+                button.style.boxShadow = '0 8px 20px rgba(59, 109, 17, 0.3)';
+            }
+        });
+    </script>
+</body>
+</html>
